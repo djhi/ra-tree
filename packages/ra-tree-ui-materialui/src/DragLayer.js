@@ -2,12 +2,12 @@
  * Custom DragLayer from Alejandro Hernandez
  * See https://github.com/react-dnd/react-dnd/issues/592#issuecomment-399287474
  */
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { DragLayer } from 'react-dnd';
 import compose from 'recompose/compose';
 import { withStyles } from '@material-ui/core/styles';
-
+import isEqual from 'lodash/isEqual';
 const styles = {
     layer: {
         position: 'fixed',
@@ -18,24 +18,10 @@ const styles = {
         width: '100%',
         height: '100%',
     },
+    item: {},
 };
 
-let subscribedToOffsetChange = false;
-
-let dragPreviewRef = null;
-
-const onOffsetChange = monitor => () => {
-    if (!dragPreviewRef) return;
-
-    const offset = monitor.getSourceClientOffset();
-    if (!offset) return;
-
-    const transform = `translate(${offset.x}px, ${offset.y}px)`;
-    dragPreviewRef.style['transform'] = transform;
-    dragPreviewRef.style['-webkit-transform'] = transform;
-};
-
-class CustomDragLayer extends React.PureComponent {
+class CustomDragLayer extends Component {
     static propTypes = {
         beingDragged: PropTypes.bool,
         classes: PropTypes.object.isRequired,
@@ -46,8 +32,8 @@ class CustomDragLayer extends React.PureComponent {
         itemBeingDragged: PropTypes.object,
     };
 
-    componentDidUpdate() {
-        dragPreviewRef = this.rootNode;
+    shouldComponentUpdate(nextProps) {
+        return !isEqual(this.props.offset, nextProps.offset);
     }
 
     render() {
@@ -56,16 +42,21 @@ class CustomDragLayer extends React.PureComponent {
             beingDragged,
             dragPreviewComponent: DragPreview,
             itemBeingDragged,
+            offset,
         } = this.props;
+        if (!beingDragged || !offset) return null;
 
-        if (!beingDragged) return null;
         return (
-            <div
-                role="presentation"
-                ref={el => (this.rootNode = el)}
-                className={classes.layer}
-            >
-                <DragPreview node={itemBeingDragged} />
+            <div className={classes.layer}>
+                <div
+                    role="presentation"
+                    className={classes.item}
+                    style={{
+                        transform: `translate(${offset.x}px, ${offset.y}px)`,
+                    }}
+                >
+                    <DragPreview node={itemBeingDragged} />
+                </div>
             </div>
         );
     }
@@ -74,15 +65,11 @@ class CustomDragLayer extends React.PureComponent {
 export default compose(
     withStyles(styles),
     DragLayer(monitor => {
-        if (!subscribedToOffsetChange) {
-            monitor.subscribeToOffsetChange(onOffsetChange(monitor));
-            subscribedToOffsetChange = true;
-        }
-
         return {
             itemBeingDragged: monitor.getItem(),
             componentType: monitor.getItemType(),
             beingDragged: monitor.isDragging(),
+            offset: monitor.getSourceClientOffset(),
         };
     })
 )(CustomDragLayer);

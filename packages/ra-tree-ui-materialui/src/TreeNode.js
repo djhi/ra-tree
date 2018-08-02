@@ -1,20 +1,25 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import ListItem from '@material-ui/core/ListItem';
 import classNames from 'classnames';
+import ListItem from '@material-ui/core/ListItem';
 import { withStyles } from '@material-ui/core/styles';
 
-export const styles = theme => ({
+const styles = theme => ({
     expandIcon: {
         margin: 0,
     },
     root: {
+        alignItems: 'baseline',
         display: 'flex',
-        // Ensure the user can click the while ListItem to toggle a node
         padding: 0,
-        // Add some padding for hierarchy
-        paddingLeft: theme.spacing.unit * 4,
         flexGrow: 1,
+    },
+    node: {
+        alignItems: 'baseline',
+        display: 'flex',
+        padding: 0,
+        flexGrow: 1,
+        paddingLeft: theme.spacing.unit * 4,
     },
     leaf: {
         display: 'flex',
@@ -22,9 +27,8 @@ export const styles = theme => ({
         // Restore default ListItem padding
         paddingTop: theme.spacing.unit * 1.5,
         paddingBottom: theme.spacing.unit * 1.5,
-        // Ensure leaf buttons are aligned with node buttons
-        paddingLeft: theme.spacing.unit * 6,
         paddingRight: theme.spacing.unit * 4,
+        paddingLeft: theme.spacing.unit * 4,
         position: 'relative',
     },
 
@@ -44,9 +48,6 @@ export const styles = theme => ({
         justifyContent: 'space-between',
         margin: 0,
         padding: 0,
-        // Apply default ListItem padding
-        paddingTop: theme.spacing.unit * 1.5,
-        paddingBottom: theme.spacing.unit * 1.5,
     },
     panelSummaryContent: {
         alignItems: 'center',
@@ -55,57 +56,91 @@ export const styles = theme => ({
     panelSummaryExpanded: {
         margin: '0 !important',
     },
+    handle: {
+        cursor: 'crosshair',
+        marginLeft: theme.spacing.unit * 2,
+        marginRight: theme.spacing.unit * 2,
+    },
+    draggingOver: {
+        background: theme.palette.action.hover,
+    },
 });
 
 const TreeNode = ({
     basePath,
-    classes,
+    canDrop,
     children,
+    classes,
+    connectDropTarget,
+    isOver,
+    isOverCurrent,
+    itemType,
     node,
     resource,
     treeNodeComponent,
     treeNodeWithChildrenComponent: TreeNodeWithChildren,
     treeNodeContentComponent: TreeNodeContent,
     ...props
-}) => (
-    <ListItem
-        button
-        classes={{
-            root: classNames(classes.root, {
-                [classes.leaf]: node.children.length === 0,
-            }),
-        }}
-        dense
-        disableGutters
-    >
-        {node.children.length > 0 ? (
-            <TreeNodeWithChildren
-                basePath={basePath}
-                classes={classes}
-                node={node}
-                resource={resource}
-                treeNodeComponent={treeNodeComponent}
-                treeNodeWithChildrenComponent={TreeNodeWithChildren}
-                treeNodeContentComponent={TreeNodeContent}
-                {...props}
+}) =>
+    connectDropTarget(
+        <div className={classes.root}>
+            <ListItem
+                button
+                classes={{
+                    root: classNames({
+                        [classes.node]: node.children.length > 0,
+                        [classes.leaf]: node.children.length === 0,
+                        [classes.draggingOver]: isOverCurrent,
+                    }),
+                }}
+                dense
+                disableGutters
             >
-                {children}
-            </TreeNodeWithChildren>
-        ) : (
-            <Fragment>
-                <TreeNodeContent
-                    basePath={basePath}
-                    node={node}
-                    resource={resource}
-                    isLeaf={true}
-                    {...props}
-                >
-                    {children}
-                </TreeNodeContent>
-            </Fragment>
-        )}
-    </ListItem>
-);
+                {node.children.length > 0 ? (
+                    <TreeNodeWithChildren
+                        basePath={basePath}
+                        cancelDropOnChildren={!!itemType}
+                        classes={classes}
+                        /*
+                            Override the isExpanded prop managed through redux on hover.
+                            Set it to undefined when not hovering to fall back to redux state
+                            so that it stay expanded if it was before
+                        */
+                        isExpanded={isOver && canDrop ? true : undefined}
+                        node={node}
+                        resource={resource}
+                        treeNodeComponent={treeNodeComponent}
+                        treeNodeWithChildrenComponent={TreeNodeWithChildren}
+                        treeNodeContentComponent={TreeNodeContent}
+                        {...props}
+                    >
+                        {children}
+                    </TreeNodeWithChildren>
+                ) : (
+                    <Fragment>
+                        <TreeNodeContent
+                            basePath={basePath}
+                            node={node}
+                            resource={resource}
+                            isLeaf={true}
+                            cancelDropOnChildren={!!itemType}
+                            onDrop={
+                                isOver && canDrop
+                                    ? event => {
+                                          event.persit();
+                                          event.preventDefault();
+                                      }
+                                    : undefined
+                            }
+                            {...props}
+                        >
+                            {children}
+                        </TreeNodeContent>
+                    </Fragment>
+                )}
+            </ListItem>
+        </div>
+    );
 
 TreeNode.propTypes = {
     basePath: PropTypes.string.isRequired,
@@ -122,6 +157,10 @@ TreeNode.propTypes = {
         PropTypes.element,
         PropTypes.func,
     ]),
+};
+
+TreeNode.defaultProps = {
+    connectDropTarget: target => target,
 };
 
 export default withStyles(styles)(TreeNode);

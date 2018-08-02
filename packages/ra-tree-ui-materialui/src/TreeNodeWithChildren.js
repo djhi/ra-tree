@@ -46,6 +46,7 @@ export class TreeNodeWithChildrenView extends Component {
             isExpanded,
             node,
             resource,
+            toggleNode,
             treeNodeComponent: TreeNode,
             treeNodeWithChildrenComponent,
             treeNodeContentComponent: TreeNodeContent,

@@ -63,7 +63,6 @@ Meant to be used as the child of the [`List`](https://marmelab.com/react-admin/L
 
 The `TreeController` accepts the following props:
 
-- `parentSource`: The field used as the parent identifier for each node. Defaults to `parent_id`
 - `getTreeFromArray`: The function used to build the tree from the fetched data. It defaults to one using [performant-array-to-tree](https://github.com/philipstanislaus/performant-array-to-tree)
 - `getTreeState`: A function which must return the tree state root from the redux state in case you mounted it on a different key than `tree`. It will be called with a single `state` argument which is the redux state.
 - `children`: A function which will be called with a single object argument having the following props
@@ -72,6 +71,7 @@ The `TreeController` accepts the following props:
     - `depth`: a number indicating its depth in the hierarchy
     - `record`: the node's original data
   - any additional props received by the `TreeController` component
+- `parentSource`: The field used as the parent identifier for each node. Defaults to `parent_id`
 
 ### TreeContext
 

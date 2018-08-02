@@ -89,6 +89,102 @@ const CategoriesList = () => (
 );
 ```
 
+## Enabling Drag & Drop
+
+You can enable drag & drop on both the `Tree` and `EditableTree` components. They both support the following props related to drag & drop:
+
+- `enableDragAndDrop`: Enable drag & drop. This will show drag handles on every nodes
+- `allowDropOnRoot`: Setting this prop to `true` will add a root drop zone at the top of the list. Dropping node on it will set their parent to null
+- `dragPreviewComponent`: Customize the preview of the currently dragged node by passing your own component. You can leverage the existing `DragPreview` component and adjusts its content. See [DragPreview](#dragpreview)
+
+```js
+// in src/category/list.js
+import React from 'react';
+import {
+    List,
+    TextField,
+} from 'react-admin';
+import { Tree } from 'ra-tree-ui-materialui';
+
+export const CategoriesList = (props) => (
+    <List {...props}>
+        <Tree allowDropOnRoot enableDragAndDrop>
+            <TextField source="name" />
+            <EditButton />
+            <DeleteButton />
+        </Tree>
+    </List>
+);
+```
+
+## API
+
+### <Tree>
+
+The `Tree` component accepts the following props:
+
+- `enableDragAndDrop`: Enable drag & drop. This will show drag handles on every nodes
+- `allowDropOnRoot`: Setting this prop to `true` will add a root drop zone at the top of the list. Dropping node on it will set their parent to null
+- `dragPreviewComponent`: Customize the preview of the currently dragged node by passing your own component. You can leverage the existing `DragPreview` component and adjusts its content. See [DragPreview](#dragpreview)
+- `getTreeFromArray`: The function used to build the tree from the fetched data. It defaults to one using [performant-array-to-tree](https://github.com/philipstanislaus/performant-array-to-tree)
+- `getTreeState`: A function which must return the tree state root from the redux state in case you mounted it on a different key than `tree`. It will be called with a single `state` argument which is the redux state.
+- `children`: A function which will be called with a single object argument having the following props
+  - `tree`: an array of the root nodes. Each node have the following properties:
+    - `children`: an array of its child nodes
+    - `depth`: a number indicating its depth in the hierarchy
+    - `record`: the node's original data
+  - any additional props received by the `TreeController` component
+- `parentSource`: The field used as the parent identifier for each node. Defaults to `parent_id`
+
+### <EditableTree>
+
+The `EditableTree` component accepts the following props:
+
+- `enableDragAndDrop`: Enable drag & drop. This will show drag handles on every nodes
+- `allowDropOnRoot`: Setting this prop to `true` will add a root drop zone at the top of the list. Dropping node on it will set their parent to null
+- `dragPreviewComponent`: Customize the preview of the currently dragged node by passing your own component. You can leverage the existing `DragPreview` component and adjusts its content. See [DragPreview](#dragpreview)
+- `getTreeFromArray`: The function used to build the tree from the fetched data. It defaults to one using [performant-array-to-tree](https://github.com/philipstanislaus/performant-array-to-tree)
+- `getTreeState`: A function which must return the tree state root from the redux state in case you mounted it on a different key than `tree`. It will be called with a single `state` argument which is the redux state.
+- `children`: A function which will be called with a single object argument having the following props
+  - `tree`: an array of the root nodes. Each node have the following properties:
+    - `children`: an array of its child nodes
+    - `depth`: a number indicating its depth in the hierarchy
+    - `record`: the node's original data
+  - any additional props received by the `TreeController` component
+- `parentSource`: The field used as the parent identifier for each node. Defaults to `parent_id`
+- `submitOnEnter`: Enable or disable the automated form submission on enter
+
+### <DragPreview>
+
+By default, the default `DragPreview` component will display the node identifier and, if it has children, the number of its children.
+
+Instead of making a full custom preview component, you can use the `DragPreview` and pass it a child, either a react element or a function. The function will be called with the current `node` and the `translate` function.
+
+```jsx
+import React from 'react';
+import { List, TextField } from 'react-admin';
+import { DragPreview, Tree } from 'ra-tree-ui-materialui';
+
+const TagDragPreview = props => (
+    <DragPreview {...props}>
+        {({ node }) => node.record.name}
+    </DragPreview>
+);
+
+const TagList = props => (
+    <List {...props} perPage={1000}>
+        <Tree
+            enableDragAndDrop
+            dragPreviewComponent={TagDragPreview}
+        >
+            <TextField source="name" />
+        </Tree>
+    </List>
+);
+
+export default TagList;
+```
+
 ## Roadmap
 
 * Support nested set hierarchical data

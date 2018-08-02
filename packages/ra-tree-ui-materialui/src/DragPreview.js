@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import compose from 'recompose/compose';
 import { withStyles } from '@material-ui/core/styles';
 import { translate } from 'ra-core';
+import isEqual from 'lodash/isEqual';
 
 const styles = theme => ({
     item: {
