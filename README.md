@@ -4,8 +4,8 @@ Components to display hierarchized data in [react-admin](https://github.com/marm
 
 This is a monorepo containing multiple packages:
 
-- [`ra-tree-core`](tree/master/packages/ra-tree-core): UI agnostic controller components providing the logic to display hierarchized data in react-admin
-- [`ra-tree-ui-materialui`](tree/master/packages/ra-tree-ui-materialui): UI components to display hierarchized data in react-admin using [material-ui](https://github.com/mui-org/material-ui)
+- [`ra-tree-core`](packages/ra-tree-core): UI agnostic controller components providing the logic to display hierarchized data in react-admin
+- [`ra-tree-ui-materialui`](packages/ra-tree-ui-materialui): UI components to display hierarchized data in react-admin using [material-ui](https://github.com/mui-org/material-ui)
 
 ## Development
 
