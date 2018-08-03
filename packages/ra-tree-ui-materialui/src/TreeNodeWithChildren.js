@@ -72,6 +72,7 @@ export class TreeNodeWithChildrenView extends Component {
                     expandIcon={<KeyboardArrowDown />}
                 >
                     <TreeNodeContent
+                        key={`TreeNodeContent${node.id}`}
                         basePath={basePath}
                         node={node}
                         resource={resource}
@@ -89,7 +90,7 @@ export class TreeNodeWithChildrenView extends Component {
                     <List dense>
                         {node.children.map(child => (
                             <TreeNode
-                                key={child.id}
+                                key={`TreeNode_${child.id}`}
                                 basePath={basePath}
                                 classes={classes}
                                 node={child}

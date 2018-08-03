@@ -1,6 +1,5 @@
 import React, { cloneElement, Children, Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { getEmptyImage } from 'react-dnd-html5-backend';
 import { withStyles } from '@material-ui/core/styles';
 import IconDragHandle from '@material-ui/icons/DragHandle';
 
@@ -52,7 +51,7 @@ class TreeNodeContent extends Component {
                 // and we can draw whatever we want on the custom drag layer instead.
 
                 connectDragPreview &&
-                    connectDragPreview(getEmptyImage(), {
+                    connectDragPreview(<span />, {
                         // IE fallback: specify that we'd rather screenshot the node
                         // when it already knows it's being dragged so we can hide it with CSS.
                         captureDraggingState: true,

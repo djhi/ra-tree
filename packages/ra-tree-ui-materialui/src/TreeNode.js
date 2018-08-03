@@ -98,6 +98,7 @@ const TreeNode = ({
             >
                 {node.children.length > 0 ? (
                     <TreeNodeWithChildren
+                        key={`TreeNodeWithChildren${node.id}`}
                         basePath={basePath}
                         cancelDropOnChildren={!!itemType}
                         classes={classes}
@@ -119,6 +120,7 @@ const TreeNode = ({
                 ) : (
                     <Fragment>
                         <TreeNodeContent
+                            key={`TreeNodeContent_${node.id}`}
                             basePath={basePath}
                             node={node}
                             resource={resource}
