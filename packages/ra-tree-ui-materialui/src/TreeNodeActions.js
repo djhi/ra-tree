@@ -22,30 +22,12 @@ export class TreeNodeActionsView extends Component {
     };
 
     render() {
-        const {
-            basePath,
-            children,
-            classes,
-            handleSubmit,
-            record,
-            resource,
-            submitOnEnter,
-        } = this.props;
+        const { children, classes, ...props } = this.props;
         return (
             <span className={classes.root}>
                 {Children.map(
                     children,
-                    field =>
-                        field
-                            ? cloneElement(field, {
-                                  basePath: field.props.basePath || basePath,
-                                  handleSubmitWithRedirect: handleSubmit,
-                                  handleSubmit,
-                                  record,
-                                  resource,
-                                  submitOnEnter,
-                              })
-                            : null
+                    action => (action ? cloneElement(action, props) : null)
                 )}
             </span>
         );

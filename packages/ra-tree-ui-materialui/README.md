@@ -46,15 +46,24 @@ import React from 'react';
 import {
     List,
     TextField,
+    EditButton,
+    DeleteButton,
 } from 'react-admin';
-import { Tree } from 'ra-tree-ui-materialui';
+import { Tree, TreeShowLayout, TreeNodeActions } from 'ra-tree-ui-materialui';
+
+const CategoriesActions = props => (
+    <TreeNodeActions {...props}>
+        <EditButton />
+        <DeleteButton />
+    </TreeNodeActions>
+);
 
 export const CategoriesList = (props) => (
     <List {...props}>
         <Tree>
-            <TextField source="name" />
-            <EditButton />
-            <DeleteButton />
+            <TreeShowLayout actions={<CategoriesActions />}>
+                <TextField source="name" />
+            </TreeShowLayout>
         </Tree>
     </List>
 );
@@ -75,18 +84,115 @@ import {
     SaveButton,
     TextInput,
 } from 'react-admin';
-import { EditableTree } from 'ra-tree-ui-materialui';
+import { Tree, TreeForm, TreeNodeActions } from 'ra-tree-ui-materialui';
+
+const CategoriesActions = props => (
+    <TreeNodeActions {...props}>
+        <SaveButton />
+        <EditButton />
+        <DeleteButton />
+    </TreeNodeActions>
+)
 
 const CategoriesList = () => (
     <List {...this.props}>
-        <EditableTree>
-            <TextInput source="name" /> {/* Quick name edition */}
-            <SaveButton />
-            <EditButton />
-            <DeleteButton />
-        </EditableTree>
+        <Tree>
+            <TreeForm actions={<CategoriesActions />}>
+                <TextInput source="name" /> {/* Quick name edition */}
+            </TreeForm>
+        </Tree>
     </List>
 );
+```
+
+## Enabling Drag & Drop
+
+You can enable drag & drop by adding the following props:
+
+- `enableDragAndDrop`: Enable drag & drop. This will show drag handles on every nodes
+- `allowDropOnRoot`: Setting this prop to `true` will add a root drop zone at the top of the list. Dropping node on it will set their parent to null
+- `dragPreviewComponent`: Customize the preview of the currently dragged node by passing your own component. You can leverage the existing `DragPreview` component and adjusts its content. See [DragPreview](#dragpreview)
+
+```js
+// in src/category/list.js
+import React from 'react';
+import {
+    List,
+    TextField,
+} from 'react-admin';
+import { Tree } from 'ra-tree-ui-materialui';
+
+export const CategoriesList = (props) => (
+    <List {...props}>
+        <Tree allowDropOnRoot enableDragAndDrop>
+            <TextField source="name" />
+        </Tree>
+    </List>
+);
+```
+
+## API
+
+### <Tree>
+
+The `Tree` component accepts the following props:
+
+- `enableDragAndDrop`: Enable drag & drop. This will show drag handles on every nodes
+- `allowDropOnRoot`: Setting this prop to `true` will add a root drop zone at the top of the list. Dropping node on it will set their parent to null
+- `dragPreviewComponent`: Customize the preview of the currently dragged node by passing your own component. You can leverage the existing `DragPreview` component and adjusts its content. See [DragPreview](#dragpreview)
+- `getTreeFromArray`: The function used to build the tree from the fetched data. It defaults to one using [performant-array-to-tree](https://github.com/philipstanislaus/performant-array-to-tree)
+- `getTreeState`: A function which must return the tree state root from the redux state in case you mounted it on a different key than `tree`. It will be called with a single `state` argument which is the redux state.
+- `children`: A function which will be called with a single object argument having the following props
+  - `tree`: an array of the root nodes. Each node have the following properties:
+    - `children`: an array of its child nodes
+    - `depth`: a number indicating its depth in the hierarchy
+    - `record`: the node's original data
+  - any additional props received by the `TreeController` component
+- `parentSource`: The field used as the parent identifier for each node. Defaults to `parent_id`
+
+### <TreeShowLayout>
+
+The `TreeShowLayout` component accepts the following props:
+
+- `actions`: A component displaying actions for each node
+
+### <TreeForm>
+
+The `TreeForm` component accepts the following props:
+
+- `actions`: A component displaying actions for each node
+- `submitOnEnter`: Enable or disable the automated form submission on enter
+- `undoable`: Enable or disable optimistic updates when editing a node
+
+### <DragPreview>
+
+By default, the default `DragPreview` component will display the node identifier and, if it has children, the number of its children.
+
+Instead of making a full custom preview component, you can use the `DragPreview` and pass it a child, either a react element or a function. The function will be called with the current `node` and the `translate` function.
+
+```jsx
+import React from 'react';
+import { List, TextField } from 'react-admin';
+import { DragPreview, Tree } from 'ra-tree-ui-materialui';
+
+const TagDragPreview = props => (
+    <DragPreview {...props}>
+        {({ node }) => node.record.name}
+    </DragPreview>
+);
+
+const TagList = props => (
+    <List {...props} perPage={1000}>
+        <Tree
+            enableDragAndDrop
+            dragPreviewComponent={TagDragPreview}
+        >
+            <TextField source="name" />
+        </TreeShow>
+    </List>
+);
+
+export default TagList;
 ```
 
 ## Roadmap

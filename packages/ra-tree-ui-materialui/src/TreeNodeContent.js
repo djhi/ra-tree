@@ -1,65 +1,70 @@
-import React, { cloneElement, Children, Component } from 'react';
+import React, { cloneElement, Children, Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { getEmptyImage } from 'react-dnd-html5-backend';
 import { withStyles } from '@material-ui/core/styles';
-import classNames from 'classnames';
+import IconDragHandle from '@material-ui/icons/DragHandle';
 
-const styles = {
-    root: {
+const styles = theme => ({
+    handle: {
         alignItems: 'center',
+        cursor: 'crosshair',
         display: 'flex',
-        flexGrow: 1,
+        marginRight: theme.spacing.unit * 2,
     },
-};
-
-const CONTAINER_CLASS = 'treenode-content';
+});
 
 class TreeNodeContent extends Component {
     static propTypes = {
         basePath: PropTypes.string.isRequired,
+        cancelDropOnChildren: PropTypes.bool,
+        containerElement: PropTypes.oneOfType([
+            PropTypes.element,
+            PropTypes.func,
+            PropTypes.string,
+        ]),
         children: PropTypes.node,
         classes: PropTypes.object.isRequired,
         isLeaf: PropTypes.bool,
         node: PropTypes.object.isRequired,
         resource: PropTypes.string.isRequired,
+        submit: PropTypes.func,
     };
 
-    handleClick = event => {
-        // This ensure clicking on a button does not collapse/expand a node
-        // When clicking on the form (empty spaces around buttons) however, it should
-        // propagate to the parent
-        if (!event.target.matches(`.${CONTAINER_CLASS}`)) {
-            event.stopPropagation();
-        }
+    static defaultProps = {
+        containerElement: 'div',
     };
 
     render() {
         const {
-            basePath,
             children,
             classes,
+            connectDragPreview,
+            connectDragSource,
+            containerElement: Container,
+            submit,
             isLeaf,
-            node: { record },
-            resource,
+            node,
             ...props
         } = this.props;
         return (
-            <div
-                className={classNames(CONTAINER_CLASS, classes.root)}
-                onClick={this.handleClick}
-            >
-                {Children.map(
-                    children,
-                    field =>
-                        field
-                            ? cloneElement(field, {
-                                  basePath: field.props.basePath || basePath,
-                                  record,
-                                  resource,
-                                  ...props,
-                              })
-                            : null
-                )}
-            </div>
+            <Fragment>
+                {// Use empty image as a drag preview so browsers don't draw it
+                // and we can draw whatever we want on the custom drag layer instead.
+
+                connectDragPreview &&
+                    connectDragPreview(getEmptyImage(), {
+                        // IE fallback: specify that we'd rather screenshot the node
+                        // when it already knows it's being dragged so we can hide it with CSS.
+                        captureDraggingState: true,
+                    })}
+                {connectDragSource &&
+                    connectDragSource(
+                        <div className={classes.handle}>
+                            <IconDragHandle />
+                        </div>
+                    )}
+                {cloneElement(Children.only(children), { node, ...props })}
+            </Fragment>
         );
     }
 }
