@@ -13,7 +13,15 @@ const dragSourceSpecs = {
         return props.node;
     },
     endDrag(
-        { basePath, crudUpdate, node, parentSource, resource, startUndoable },
+        {
+            basePath,
+            dispatchCrudUpdate,
+            node,
+            parentSource,
+            resource,
+            startUndoable,
+            undoableDragDrop = true,
+        },
         monitor
     ) {
         if (!monitor.didDrop()) {
@@ -28,15 +36,26 @@ const dragSourceSpecs = {
             return;
         }
 
-        startUndoable(
-            crudUpdate(
-                resource,
-                node.record.id,
-                { ...node.record, [parentSource]: droppedOnNode.id },
-                node.record,
-                basePath,
-                false
-            )
+        if (undoableDragDrop) {
+            return startUndoable(
+                crudUpdateAction(
+                    resource,
+                    node.record.id,
+                    { ...node.record, [parentSource]: droppedOnNode.id },
+                    node.record,
+                    basePath,
+                    false
+                )
+            );
+        }
+
+        return dispatchCrudUpdate(
+            resource,
+            node.record.id,
+            { ...node.record, [parentSource]: droppedOnNode.id },
+            node.record,
+            basePath,
+            false
         );
     },
 };
@@ -50,7 +69,10 @@ const dragSourceConnect = (connect, monitor) => ({
 export default compose(
     connect(
         undefined,
-        { crudUpdate: crudUpdateAction, startUndoable: startUndoableAction }
+        {
+            dispatchCrudUpdate: crudUpdateAction,
+            startUndoable: startUndoableAction,
+        }
     ),
     DragSource(DROP_TARGET_TYPE, dragSourceSpecs, dragSourceConnect)
 );

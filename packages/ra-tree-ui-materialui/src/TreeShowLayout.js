@@ -23,6 +23,8 @@ const sanitizeRestProps = ({
     parentSource,
     startUndoable,
     translate,
+    undoable,
+    undoableDragDrop,
     ...rest
 }) => rest;
 

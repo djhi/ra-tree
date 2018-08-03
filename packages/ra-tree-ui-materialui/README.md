@@ -112,6 +112,7 @@ You can enable drag & drop by adding the following props:
 - `enableDragAndDrop`: Enable drag & drop. This will show drag handles on every nodes
 - `allowDropOnRoot`: Setting this prop to `true` will add a root drop zone at the top of the list. Dropping node on it will set their parent to null
 - `dragPreviewComponent`: Customize the preview of the currently dragged node by passing your own component. You can leverage the existing `DragPreview` component and adjusts its content. See [DragPreview](#dragpreview)
+- `undoableDragDrop`: Enable optimistic updates from drag & drop operations. Defaults to `true`
 
 ```js
 // in src/category/list.js
@@ -162,7 +163,7 @@ The `TreeForm` component accepts the following props:
 
 - `actions`: A component displaying actions for each node
 - `submitOnEnter`: Enable or disable the automated form submission on enter
-- `undoable`: Enable or disable optimistic updates when editing a node
+- `undoable`: Enable or disable optimistic updates when editing a node. Defaults to `true`
 
 ### <DragPreview>
 

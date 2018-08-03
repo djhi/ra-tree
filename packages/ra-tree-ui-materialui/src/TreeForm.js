@@ -62,6 +62,8 @@ const sanitizeRestProps = ({
     touch,
     translate,
     triggerSubmit,
+    undoable,
+    undoableDragDrop,
     untouch,
     valid,
     validate,

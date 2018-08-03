@@ -5,8 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import { TreeController } from 'ra-tree-core';
 import { DragDropContext } from 'react-dnd';
-import HTML5Backend from 'react-dnd-html5-backend';
-
+import TouchBackend from 'react-dnd-touch-backend';
 import draggable from './draggable';
 import droppable from './droppable';
 import DragLayer from './DragLayer';
@@ -57,7 +56,13 @@ export const Tree = ({
     ...props
 }) => {
     const Container = enableDragAndDrop
-        ? DragDropContext(HTML5Backend)('div')
+        ? DragDropContext(
+              TouchBackend({
+                  enableKeyboardEvents: true,
+                  enableMouseEvents: true,
+                  enableTouchEvents: true,
+              })
+          )('div')
         : Fragment;
 
     const TreeNode = enableDragAndDrop
@@ -89,7 +94,7 @@ export const Tree = ({
                         ) : null}
                         {tree.map(node => (
                             <TreeNode
-                                key={node.id}
+                                key={`TreeNode_${node.id}`}
                                 classes={{
                                     ...classes,
                                     root: classes.node || undefined,
