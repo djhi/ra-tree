@@ -1,6 +1,6 @@
 {
     "name": "ra-tree-core",
-    "version": "0.0.1",
+    "version": "1.0.0",
     "description": "A treeview component without ui to use with react-admin",
     "main": "lib/index.js",
     "files": [

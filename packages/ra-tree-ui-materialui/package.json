@@ -1,6 +1,6 @@
 {
     "name": "ra-tree-ui-materialui",
-    "version": "0.0.1",
+    "version": "1.0.0",
     "description": "A treeview component with material-ui to use with react-admin",
     "main": "lib/index.js",
     "files": [
@@ -41,7 +41,7 @@
         "lodash": "^4.17.10",
         "prop-types": "^15.6.1",
         "ra-core": "^2.0.0",
-        "ra-tree-core": "^0.0.1",
+        "ra-tree-core": "^1.0.0",
         "ra-ui-materialui": "^2.0.0"
     },
     "devDependencies": {
