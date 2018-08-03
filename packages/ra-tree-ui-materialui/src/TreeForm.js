@@ -3,11 +3,12 @@ import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import { withStyles } from '@material-ui/core/styles';
 import { reduxForm } from 'redux-form';
-
 import {
     crudUpdate as crudUpdateAction,
     startUndoable as startUndoableAction,
 } from 'ra-core';
+
+import TreeFormActions from './TreeFormActions';
 
 const styles = {
     root: {
@@ -70,6 +71,10 @@ const sanitizeRestProps = ({
     ...props
 }) => props;
 class Form extends Component {
+    static defaultProps = {
+        actions: <TreeFormActions />,
+    };
+
     handleClick = event => {
         event.persist();
         // This ensure clicking on an input or button does not collapse/expand a node
