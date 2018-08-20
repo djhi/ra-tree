@@ -6800,6 +6800,20 @@ ra-language-french@^2.0.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/ra-language-french/-/ra-language-french-2.2.0.tgz#f24157d99fa97072faae1f80717312faa2a3cad6"
 
+ra-tree-core@^0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/ra-tree-core/-/ra-tree-core-0.0.1.tgz#d960337a05981f982864e96ef018a5bf1249e3a6"
+  dependencies:
+    performant-array-to-tree "^1.1.2"
+    prop-types "^15.6.1"
+
+ra-tree-ui-materialui@^0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/ra-tree-ui-materialui/-/ra-tree-ui-materialui-0.0.1.tgz#1040c6020d46bbe639fa5228878f4e88eb0cc146"
+  dependencies:
+    prop-types "^15.6.1"
+    ra-tree-core "^0.0.1"
+
 ra-ui-materialui@^2.0.0, ra-ui-materialui@^2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/ra-ui-materialui/-/ra-ui-materialui-2.2.0.tgz#20d8c77f11ed2c001fe7a7552e6f2a60928c0e50"

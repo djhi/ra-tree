@@ -11,7 +11,7 @@
     ],
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/marmelab/react-admin.git"
+        "url": "git+https://github.com/djhi/ra-tree.git"
     },
     "keywords": [
         "reactjs",
@@ -24,9 +24,9 @@
     "author": "Gildas Garcia",
     "license": "MIT",
     "bugs": {
-        "url": "https://github.com/marmelab/react-admin/issues"
+        "url": "https://github.com/djhi/ra-tree/issues"
     },
-    "homepage": "https://github.com/marmelab/react-admin#readme",
+    "homepage": "https://github.com/djhi/ra-tree#readme",
     "scripts": {
         "build": "rimraf ./lib && cross-env NODE_ENV=production babel --quiet ./src -d ./lib --ignore spec.js,test.js",
         "prepublish": "yarn run build",
