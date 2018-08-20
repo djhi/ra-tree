@@ -40,6 +40,32 @@ With a categories ressource having this structure where a category may have a pa
 ]
 ```
 
+First, you need to register the tree reducer:
+
+```js
+// in App.js
+import React from 'react';
+import { Admin, Resource } from 'react-admin';
+import { reducer as tree } from 'ra-tree-ui-materialui';
+
+import dataProvider from './dataProvider';
+import posts from './posts';
+import tags from './tags';
+
+const App = () => (
+    <Admin
+        dataProvider={dataProvider}
+        locale="en"
+        customReducers={{ tree }}
+    >
+        <Resource name="posts" {...posts} />
+        <Resource name="tags" {...tags} />
+    </Admin>
+)
+```
+
+Then, you can use the tree components:
+
 ```js
 // in src/category/list.js
 import React from 'react';
