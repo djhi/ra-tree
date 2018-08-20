@@ -155,15 +155,16 @@ class Form extends Component {
                               })
                             : null
                 )}
-                {cloneElement(actions, {
-                    basePath,
-                    record: node.record,
-                    resource,
-                    handleSubmit: this.handleSubmit,
-                    handleSubmitWithRedirect: this.handleSubmit,
-                    submitOnEnter,
-                    ...sanitizeRestProps(props),
-                })}
+                {actions &&
+                    cloneElement(actions, {
+                        basePath,
+                        record: node.record,
+                        resource,
+                        handleSubmit: this.handleSubmit,
+                        handleSubmitWithRedirect: this.handleSubmit,
+                        submitOnEnter,
+                        ...sanitizeRestProps(props),
+                    })}
             </form>
         );
     }

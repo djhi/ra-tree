@@ -67,12 +67,13 @@ export class ShowLayout extends Component {
                               })
                             : null
                 )}
-                {cloneElement(actions, {
-                    basePath,
-                    record: node.record,
-                    resource,
-                    ...sanitizeRestProps(props),
-                })}
+                {actions &&
+                    cloneElement(actions, {
+                        basePath,
+                        record: node.record,
+                        resource,
+                        ...sanitizeRestProps(props),
+                    })}
             </div>
         );
     }
