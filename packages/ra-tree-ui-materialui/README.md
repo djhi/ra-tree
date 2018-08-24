@@ -115,8 +115,10 @@ import { Tree, TreeForm, TreeNodeActions } from 'ra-tree-ui-materialui';
 const CategoriesActions = props => (
     <TreeNodeActions {...props}>
         <SaveButton />
-        <EditButton />
-        <DeleteButton />
+        <IgnoreFormProps> {/* This is important to not get warnings about unknown props with those buttons */}
+            <EditButton />
+            <DeleteButton />
+        </IgnoreFormProps>
     </TreeNodeActions>
 )
 
