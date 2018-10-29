@@ -4,4 +4,4 @@ export TreeNodeActions from './TreeNodeActions';
 export DragPreview from './DragPreview';
 export TreeShowLayout from './TreeShowLayout';
 export TreeForm from './TreeForm';
-export * from '../../ra-tree-core/lib';
+export * from '../../ra-tree-core/src';
