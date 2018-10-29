@@ -1,6 +1,6 @@
 # ra-tree
 
-**Obsolte**: see https://github.com/marmelab/react-admin/tree/master/packages/ra-tree-ui-materialui for the new version
+**Obsolete**: see https://github.com/marmelab/react-admin/tree/master/packages/ra-tree-ui-materialui for the new version
 
 Components to display hierarchized data in [react-admin](https://github.com/marmelab/react-admin).
 
